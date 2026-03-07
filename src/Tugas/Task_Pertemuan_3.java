@@ -2,7 +2,7 @@ package Tugas;
 public class Task_Pertemuan_3 {
     public static void main(String[] args) {
         int[] x = {20, 15, 90, 13, 26};
-        // Cetak Data Awal
+        // Mencetak Data Awal
         System.out.print("Data Awal: [");
         for (int i = 0; i < x.length; i++) {
             System.out.print(x[i] + (i == x.length - 1 ? "" : ", "));
