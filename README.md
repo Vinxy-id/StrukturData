@@ -24,18 +24,21 @@ Untuk menjaga agar semuanya tetap rapi dan mudah dicari, folder di dalam reposit
 ## 📖 Rangkuman Materi
 > **Info:** Mengingat pada Pertemuan 1 kita lebih banyak membahas kontrak dan tata tertib perkuliahan, maka catatan materi langsung dimulai dari Pertemuan 2.
 
-- **Pertemuan 2: Konsep Tipe Data**
-  Membahas bahwa tipe data dalam Java secara umum terbagi menjadi dua kelompok besar. Dalam penulisan kode, kita wajib mendefinisikan tipe data dengan tepat sesuai peruntukannya. *(Selengkapnya bisa dibaca pada arsip Pertemuan 2)*.
+- **Pertemuan 2: Nested Loop & Pembentukan Pola (Pattern)**
+  Berisi implementasi dasar tentang penggunaan perulangan bersarang (`for-loop` dalam `for-loop`) dipadukan dengan percabangan `if-else` untuk mencetak huruf atau bangun ruang tertentu menggunakan karakter.
+  *(↳ [Baca selengkapnya di sini](src/Materi/Pertemuan2/README.md))*
 
-- **Pertemuan 3: Operator Relasional, Logika, & Looping di Java**
-  Melanjutkan dari sesi sebelumnya, materi kali ini berfokus pada pendalaman logika dan komparasi (operator relasional), serta bagaimana cara yang benar menggunakan perulangan (*looping*), khususnya menggunakan `for`. *(Selengkapnya bisa dibaca pada arsip Pertemuan 3)*.
+- **Pertemuan 3: Array, Kondisi Logika & Pertukaran Nilai (Swap)**
+  Membahas dasar *struktur data* dengan pengenalan **Array 1-Dimensi** di Java, dibarengi dengan praktik melakukan pertukaran nilai antar indeks, serta mencegah *bug operator relasional* saat mem-print dengan `for-loop`.
+  *(↳ [Baca selengkapnya di sini](src/Materi/Pertemuan3/README.md))*
 
 ---
 
 ## 📝 Daftar Tugas
 
-- **Tugas 1 (Selection Sorting)**
-  Implementasi algoritma pengurutan nilai yang cara kerjanya memilih nilai tertentu untuk dipindahkan posisinya secara bertahap. *(Detail dan *source code*-nya bisa dilihat di arsip Tugas 1)*.
+- **Tugas 1 (Selection Sorting / Task Pertemuan 3)**
+  Implementasi algoritma pengurutan nilai (*Selection Sort*) yang cara kerjanya memilih nilai terkecil pada deret angka yang tersisa untuk dipindahkan ke posisi deret awal secara bertahap (iterasi).
+  *(↳ Source code: [`src/Tugas/Task_Pertemuan_3.java`](src/Tugas/Task_Pertemuan_3.java))*
 
 ---
 
