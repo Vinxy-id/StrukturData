@@ -7,6 +7,7 @@ public class Task_Pertemuan_3 {
             System.out.print(x[i] + (i == x.length - 1 ? "" : ", "));
         }
         System.out.println("]");
+
         // Proses Selection Sort (Iterasi 1 sampai 4)
         for (int j = 0; j < x.length - 1; j++) {
             int min = x[j];
