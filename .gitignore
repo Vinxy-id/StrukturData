@@ -1,0 +1,17 @@
+# Compiled class files dan folder output kompilasi
+bin/
+*.class
+
+# Folder IDE
+.vscode/
+
+# Log files
+*.log
+
+# Ekstensi Archive
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
