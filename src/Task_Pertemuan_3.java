@@ -1,7 +1,9 @@
+import java.util.Arrays;
+
 public class Task_Pertemuan_3 {
     public static void main(String[] args) {
         int[] x = {20, 15, 90, 13, 26};
-
+        System.out.println("data awal = " + Arrays.toString(x));
         // Outer loop untuk mengontrol jumlah iterasi (1 sampai 4)
         for (int j = 0; j < x.length - 1; j++) {
             
