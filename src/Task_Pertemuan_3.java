@@ -1,17 +1,19 @@
-import java.util.Arrays;
-
 public class Task_Pertemuan_3 {
     public static void main(String[] args) {
         int[] x = {20, 15, 90, 13, 26};
-        System.out.println("data awal = " + Arrays.toString(x));
-        // Outer loop untuk mengontrol jumlah iterasi (1 sampai 4)
+        // Cetak Data Awal
+        System.out.print("Data Awal: [");
+        for (int i = 0; i < x.length; i++) {
+            System.out.print(x[i] + (i == x.length - 1 ? "" : ", "));
+        }
+        System.out.println("]");
+
+        // Proses Selection Sort (Iterasi 1 sampai 4)
         for (int j = 0; j < x.length - 1; j++) {
-            
             int min = x[j];
             int index = j;
-
-            // Inner loop: mencari nilai terkecil dari sisa array
-            for (int i = j + 1; i < x.length; i++) { 
+            // Mencari nilai terkecil
+            for (int i = j + 1; i < x.length; i++) {
                 if (x[i] < min) {
                     min = x[i];
                     index = i;
@@ -19,18 +21,17 @@ public class Task_Pertemuan_3 {
             }
 
             // Proses Tukar (Swap)
-            if (x[j] > x[index]) {
-                int temp = x[j];
-                x[j] = x[index];
-                x[index] = temp;
-            }
+            int temp = x[j];
+            x[j] = x[index];
+            x[index] = temp;
 
-            // Cetak Hasil per Iterasi langsung di dalam loop
-            System.out.print("Iterasi " + (j + 1) + ": ");
+            // Mencetak Hasil per Iterasi dengan format [a, b, c, d, e]
+            System.out.print("Iterasi " + (j + 1) + ": [");
             for (int k = 0; k < x.length; k++) {
-                System.out.print(x[k] + " ");
+                // Logika: tambahkan koma kecuali untuk angka terakhir
+                System.out.print(x[k] + (k == x.length - 1 ? "" : ", "));
             }
-            System.out.println(); // Pindah baris untuk iterasi berikutnya
+            System.out.println("]");
         }
     }
 }
