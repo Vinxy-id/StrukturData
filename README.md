@@ -11,8 +11,11 @@ Untuk menjaga agar semuanya tetap rapi dan mudah dicari, folder di dalam reposit
 
 ```text
 📦 Repositori Struktur Data
- ┣ 📂 Materi    => Berisi rangkuman materi beserta contoh implementasi kodenya.
- ┣ 📂 Tugas     => Tempat menyimpan hasil pengerjaan tugas akademik.
+ ┣ 📂 bin       => Folder kompilasi otomatis dari Java (.class files)
+ ┣ 📂 lib       => Folder yang disiapkan untuk eksternal library (jika dibutuhkan)
+ ┣ 📂 src       => Folder utama *source code*
+ ┃  ┣ 📂 Materi => Berisi rangkuman materi beserta contoh implementasi kodenya.
+ ┃  ┗ 📂 Tugas  => Tempat menyimpan hasil pengerjaan tugas akademik.
  ┗ 📜 README.md => Halaman dokumentasi utama ini sebagai panduan atau rujukan.
 ```
 
