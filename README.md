@@ -44,3 +44,8 @@ Untuk menjaga agar semuanya tetap rapi dan mudah dicari, folder di dalam reposit
 
 ## 🚫 Status Kontributor
 Dikarenakan tujuan utama repositori ini hanyalah sebagai buku catatan pribadi dan sarana untuk mengumpulkan tugas mandiri, maka **tidak ada akses kontribusi** yang dibuka untuk umum. Aturan ini hanya dikecualikan jika ke depannya terdapat instruksi mengenai project pengerjaan lintas kelompok.
+
+---
+
+## ⚖️ Lisensi
+Repositori ini dilisensikan di bawah [MIT License](LICENSE). Kamu bebas menggunakan, mempelajari, dan memodifikasi kode di dalamnya untuk keperluan belajar tanpa jaminan garansi apa pun.
