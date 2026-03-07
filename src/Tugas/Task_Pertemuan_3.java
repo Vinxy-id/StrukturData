@@ -29,7 +29,7 @@ public class Task_Pertemuan_3 {
             // Mencetak Hasil per Iterasi dengan format [a, b, c, d, e]
             System.out.print("Iterasi " + (j + 1) + ": [");
             for (int k = 0; k < x.length; k++) {
-                // Logika: tambahkan koma kecuali untuk angka terakhir
+                // Logika: menambahkan koma kecuali untuk angka terakhir
                 System.out.print(x[k] + (k == x.length - 1 ? "" : ", "));
             }
             System.out.println("]");
