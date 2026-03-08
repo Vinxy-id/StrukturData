@@ -1,4 +1,4 @@
-package Tugas;
+package Tugas.Tugas1_Pertemuan3;
 public class Task_Pertemuan_3 {
     public static void main(String[] args) {
         int[] x = {20, 15, 90, 13, 26};
