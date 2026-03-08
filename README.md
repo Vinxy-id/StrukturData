@@ -1,5 +1,13 @@
 # 📚 Struktur Data (Semester 2)
 
+## 👤 Identitas
+
+- **Nama:** [Alvin Widiantara]
+- **NIM:** [25161562037]
+- **Kelas:** [INF2A]
+
+---
+
 Selamat datang di repositori mata kuliah **Struktur Data**. Fokus utama mata kuliah ini adalah memahami metode paling efisien untuk mengatur, menyimpan, dan mengelola data di dalam memori komputer. 
 
 Namun, pada awal semester 2 ini, fokus utamanya adalah pemantapan dengan me-*review* dan mendalami kembali dasar-dasar yang sudah kita pelajari pada mata kuliah Algoritma dan Pemrograman.
