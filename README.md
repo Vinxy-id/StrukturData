@@ -50,9 +50,7 @@ Untuk menjaga agar semuanya tetap rapi dan mudah dicari, folder di dalam reposit
 
 - **Tugas 1 (Selection Sorting / Task Pertemuan 3)**
   Implementasi algoritma pengurutan nilai (*Selection Sort*) yang cara kerjanya memilih nilai terkecil pada deret angka yang tersisa untuk dipindahkan ke posisi deret awal secara bertahap (iterasi).
-  *(↳ Source code: [`src/Tugas/Task_Pertemuan_3.java`](src/Tugas/Task_Pertemuan_3.java))*
-
----
+  *(↳ Source code: [`src/Tugas/Tugas1_Pertemuan3/Task_Pertemuan_3.java`](src/Tugas/Tugas1_Pertemuan3/Task_Pertemuan_3.java))*
 
 ## 🚫 Status Kontributor
 Dikarenakan tujuan utama repositori ini hanyalah sebagai buku catatan pribadi dan sarana untuk mengumpulkan tugas mandiri, maka **tidak ada akses kontribusi** yang dibuka untuk umum. Aturan ini hanya dikecualikan jika ke depannya terdapat instruksi mengenai project pengerjaan lintas kelompok.
