@@ -40,6 +40,10 @@ Untuk menjaga agar semuanya tetap rapi dan mudah dicari, folder di dalam reposit
   Membahas dasar *struktur data* dengan pengenalan **Array 1-Dimensi** di Java, dibarengi dengan praktik melakukan pertukaran nilai antar indeks, serta mencegah *bug operator relasional* saat mem-print dengan `for-loop`.
   *(↳ [Baca selengkapnya di sini](src/Materi/Pertemuan3/README.md))*
 
+- **Pertemuan 5: Algoritma Pengurutan - Bubble Sort**
+  Implementasi algoritma pengurutan dasar menggunakan metode **Bubble Sort**. Mempelajari mekanisme *swapping* data antar elemen yang berdekatan untuk mengurutkan dataset secara iteratif.
+  *(↳ [Baca selengkapnya di sini](src/Materi/Pertemuan5/README.MD))*
+
 ---
 
 ## 📝 Daftar Tugas
