@@ -14,7 +14,7 @@ class Mahasiswa {
     }
 }
 
-public class SortingMahasiswaStepByStep1 {
+public class SortingMahasiswaStepByStep2 {
 
     // Utility: cetak seluruh array dengan pesan
     public static void printStep(Mahasiswa[] arr, String pesan, int stepKe) {
