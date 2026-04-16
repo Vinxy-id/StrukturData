@@ -1,5 +1,14 @@
 # Tugas UTS Part 1 - Struktur Data (Sorting Mahasiswa)
 
+## 👤 Identitas
+- **Nama:** Alvin Widiantara
+- **NIM:** 25161562037
+- **Kelas:** INF2A
+
+![Foto Profil](profil.png)
+
+---
+
 Repository ini berisi codingan Java untuk mengimplementasikan algoritma sorting (pengurutan) pada data mahasiswa berdasarkan nilai mereka secara descending (dari tinggi ke rendah).
 
 ## Deskripsi Codingan
