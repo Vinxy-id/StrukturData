@@ -1,6 +1,5 @@
-import Tugas.UTS_Part1_Pertemuan7.Mahasiswa;
-
 package Materi.Pertemuan6.DraftUTS;
+
 class Mahasiswa {
     String nim;
     String nama;
