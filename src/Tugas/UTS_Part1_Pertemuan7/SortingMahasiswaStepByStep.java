@@ -12,12 +12,14 @@ public class SortingMahasiswaStepByStep {
         }
 
         void cetak() {
-            // Pakai print biasa dengan tab agar terlihat lebih manual
-            System.out.println(nim + "\t" + nama + "\t\t" + nilai);
+            System.out.print(nim + "\t" + nama);
+            for (int i = nama.length(); i < 25; i++) {
+                System.out.print(" ");
+            }
+            System.out.println(nilai);
         }
     }
 
-    // Ganti nama method jadi lebih santai
     public static void tampil(Mhs[] m, String ket, int step) {
         System.out.println("\n[" + ket + "] Step Ke-" + step);
         System.out.println("NIM\t\tNama\t\t\tNilai");
@@ -107,29 +109,29 @@ public class SortingMahasiswaStepByStep {
             new Mhs("20241009", "Rizky Aditya", 76)
         };
 
-        System.out.println("=== DATA SEBELUM SORT ===");
+        System.out.println("========= DATA SEBELUM SORT =========");
         System.out.println("NIM\t\tNama\t\t\tNilai");
         for (Mhs m : list) m.cetak();
 
         // Tes Bubble
         Mhs[] d1 = list.clone();
-        System.out.println("\n\n*** MULAI BUBBLE SORT ***");
+        System.out.println("\n\n********* MULAI BUBBLE SORT *********");
         bubbleSort(d1);
-        System.out.println("\n--- HASIL AKHIR BUBBLE ---");
+        System.out.println("\n--------- HASIL AKHIR BUBBLE ---------");
         for (Mhs m : d1) m.cetak();
 
         // Tes Insertion
         Mhs[] d2 = list.clone();
-        System.out.println("\n\n*** MULAI INSERTION SORT ***");
+        System.out.println("\n\n********* MULAI INSERTION SORT *********");
         insertionSort(d2);
-        System.out.println("\n--- HASIL AKHIR INSERTION ---");
+        System.out.println("\n--------- HASIL AKHIR INSERTION ---------");
         for (Mhs m : d2) m.cetak();
 
         // Tes Selection
         Mhs[] d3 = list.clone();
-        System.out.println("\n\n*** MULAI SELECTION SORT ***");
+        System.out.println("\n\n********* MULAI SELECTION SORT *********");
         selectionSort(d3);
-        System.out.println("\n--- HASIL AKHIR SELECTION ---");
+        System.out.println("\n--------- HASIL AKHIR SELECTION ---------");
         for (Mhs m : d3) m.cetak();
     }
-}
+}
