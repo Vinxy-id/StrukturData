@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualisasi Alur Program Binary Search Tree</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        @keyframes pulse-highlight {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0px rgba(245, 158, 11, 0.7); }
+            50% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+        }
+        .node-active {
+            animation: pulse-highlight 1.5s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+    <!-- HEADER -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-indigo-600/20 text-indigo-400 rounded-lg border border-indigo-500/30">
+                    <i class="fa-solid fa-diagram-project text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                        BST Interactive Visualizer
+                        <span class="text-xs font-normal bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded-full border border-indigo-500/20">Java Edition</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">Visualisasi Eksekusi Kode Pertemuan 12 (Struktur Data Tree)</p>
+                </div>
+            </div>
+            
+            <!-- Quick Mode Selectors -->
+            <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800 text-sm">
+                <button onclick="changeMode('insert')" id="btn-mode-insert" class="px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-indigo-600 text-white">
+                    <i class="fa-solid fa-plus-circle mr-1.5 text-xs"></i>Penyisipan (Insert)
+                </button>
+                <button onclick="changeMode('inorder')" id="btn-mode-inorder" class="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-arrow-right-left mr-1.5 text-xs"></i>Inorder
+                </button>
+                <button onclick="changeMode('preorder')" id="btn-mode-preorder" class="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-arrow-down-short-wide mr-1.5 text-xs"></i>Preorder
+                </button>
+                <button onclick="changeMode('postorder')" id="btn-mode-postorder" class="px-4 py-2 rounded-lg font-medium transition-all duration-200 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-arrow-up-wide-short mr-1.5 text-xs"></i>Postorder
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- LEFT COLUMN: CODE & CONSOLE (5 COLS) -->
+        <section class="lg:col-span-5 flex flex-col gap-6 h-full min-h-[500px]">
+            <!-- Code Editor Box -->
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 flex flex-col overflow-hidden shadow-2xl flex-grow h-[450px]">
+                <div class="px-4 py-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                        <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                        <span class="text-xs font-semibold text-slate-400 ml-2 font-mono">tree.java</span>
+                    </div>
+                    <span class="text-xs text-slate-500 bg-slate-800/40 px-2 py-1 rounded">Materi.Pertemuan12</span>
+                </div>
+                
+                <!-- Code Viewer -->
+                <div id="code-container" class="overflow-y-auto p-4 code-font text-[11px] md:text-xs leading-relaxed text-slate-300 select-none flex-grow bg-slate-900/50">
+                    <!-- Dynamic Line Rendering will be injected here -->
+                </div>
+            </div>
+
+            <!-- Console Box -->
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 flex flex-col h-[180px] overflow-hidden shadow-lg">
+                <div class="px-4 py-2.5 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+                    <span class="text-xs font-bold text-emerald-400 tracking-wider flex items-center gap-2 font-mono">
+                        <i class="fa-solid fa-terminal"></i> SIMULATOR CONSOLE
+                    </span>
+                    <button onclick="clearConsole()" class="text-[10px] text-slate-400 hover:text-white hover:bg-slate-800 px-2 py-0.5 rounded transition">
+                        Clear
+                    </button>
+                </div>
+                <div id="console-output" class="p-3 bg-slate-950/80 code-font text-xs text-slate-300 overflow-y-auto flex-grow space-y-1">
+                    <div class="text-slate-500">// Jalankan program untuk melihat output...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: VISUALIZER & CONTROLS (7 COLS) -->
+        <section class="lg:col-span-7 flex flex-col gap-6">
+            
+            <!-- Visualization Canvas -->
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 p-6 flex flex-col relative overflow-hidden shadow-2xl h-[450px]">
+                <div class="absolute top-4 left-4 z-10">
+                    <span class="text-xs font-semibold tracking-wider text-slate-400 uppercase">Tree Canvas</span>
+                </div>
+                
+                <!-- Legend -->
+                <div class="absolute top-4 right-4 z-10 flex gap-4 text-[10px] text-slate-400 bg-slate-950/80 px-3 py-1.5 rounded-lg border border-slate-800">
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-slate-700 inline-block border border-slate-600"></span>
+                        <span>Belum Ada / Nonaktif</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block node-active"></span>
+                        <span>Dievaluasi</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                        <span>Aktif / Dikunjungi</span>
+                    </div>
+                </div>
+
+                <!-- Tree Rendering Container -->
+                <div id="tree-viewport" class="relative w-full flex-grow mt-8">
+                    <!-- SVG element for connection lines -->
+                    <svg id="tree-svg-connections" class="absolute inset-0 w-full h-full pointer-events-none z-0"></svg>
+                    <!-- Node elements will be absolutely positioned here -->
+                    <div id="tree-nodes-container" class="absolute inset-0 z-10"></div>
+                </div>
+            </div>
+
+            <!-- Controller Bar -->
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
+                <!-- Status & Step count -->
+                <div class="text-center md:text-left">
+                    <div id="step-count" class="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-0.5">Langkah: 0 / 0</div>
+                    <div id="current-action" class="text-sm text-slate-200 font-medium line-clamp-1">Pilih mode dan tekan Play untuk memulai.</div>
+                </div>
+                
+                <!-- Navigation buttons -->
+                <div class="flex items-center gap-2">
+                    <button onclick="prevStep()" class="p-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-all active:scale-95 disabled:opacity-30 disabled:pointer-events-none" id="btn-prev" title="Langkah Sebelumnya">
+                        <i class="fa-solid fa-chevron-left text-sm"></i>
+                    </button>
+                    
+                    <button onclick="togglePlay()" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl transition-all shadow-lg shadow-indigo-600/20 active:scale-95 flex items-center gap-2 min-w-[110px] justify-center" id="btn-play" title="Putar Otomatis">
+                        <i id="play-icon" class="fa-solid fa-play text-sm"></i> <span id="play-text">Mulai</span>
+                    </button>
+                    
+                    <button onclick="nextStep()" class="p-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-all active:scale-95 disabled:opacity-30 disabled:pointer-events-none" id="btn-next" title="Langkah Selanjutnya">
+                        <i class="fa-solid fa-chevron-right text-sm"></i>
+                    </button>
+                    
+                    <button onclick="resetSimulation()" class="p-3 bg-slate-800 hover:bg-rose-950 hover:text-rose-400 text-slate-400 rounded-xl transition-all active:scale-95" title="Reset Simulasi">
+                        <i class="fa-solid fa-rotate-right text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- Simulation speed selector -->
+                <div class="flex items-center gap-2 text-xs bg-slate-950 px-3 py-2 rounded-xl border border-slate-800">
+                    <span class="text-slate-500">Kelekatan:</span>
+                    <select id="play-speed" class="bg-transparent text-slate-200 font-semibold focus:outline-none cursor-pointer">
+                        <option value="1500" class="bg-slate-900">Normal (1.5s)</option>
+                        <option value="800" class="bg-slate-900" selected>Cepat (0.8s)</option>
+                        <option value="2500" class="bg-slate-900">Lambat (2.5s)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Explanation / Concept explanation of the active line -->
+            <div class="bg-slate-900/60 rounded-2xl border border-slate-800 p-5 shadow-lg relative overflow-hidden">
+                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-500"></div>
+                <h3 class="text-sm font-bold text-white mb-1.5 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-indigo-400"></i> Detail Analisis Eksekusi
+                </h3>
+                <p id="step-detail" class="text-slate-300 text-xs md:text-sm leading-relaxed">
+                    Pilih salah satu mode penelusuran atau penyisipan di bagian atas untuk mulai menganalisis bagaimana bahasa Java mengeksekusi struktur data Binary Search Tree (BST) di memori RAM.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-900 py-6 text-center text-xs text-slate-600 bg-slate-950 mt-auto">
+        <p>© 2026 Pertemuan 12: Struktur Data Tree & Traversals. Made for educational purposes.</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Source Code Lines to Render
+        const javaCodeLines = [
+            { num: 1, text: "package Coding.src.Materi.Pertemuan12;" },
+            { num: 2, text: "" },
+            { num: 3, text: "class Node {" },
+            { num: 4, text: "    int data;" },
+            { num: 5, text: "    Node left, right;" },
+            { num: 6, text: "" },
+            { num: 7, text: "    public Node(int data) {" },
+            { num: 8, text: "        this.data = data;" },
+            { num: 9, text: "        left = null; right = null;" },
+            { num: 10, text: "    }" },
+            { num: 11, text: "}" },
+            { num: 12, text: "" },
+            { num: 13, text: "public class tree {" },
+            { num: 14, text: "    Node root;" },
+            { num: 15, text: "    public tree() { root = null; }" },
+            { num: 16, text: "" },
+            { num: 17, text: "    public void insert(int data) {" },
+            { num: 18, text: "        root = insertRec(root, data);" },
+            { num: 19, text: "    }" },
+            { num: 20, text: "" },
+            { num: 21, text: "    private Node insertRec(Node root, int data) {" },
+            { num: 22, text: "        if (root == null) {" },
+            { num: 23, text: "            root = new Node(data);" },
+            { num: 24, text: "            return root;" },
+            { num: 25, text: "        }" },
+            { num: 26, text: "        if (data < root.data) {" },
+            { num: 27, text: "            root.left = insertRec(root.left, data);" },
+            { num: 28, text: "        } else if (data > root.data) {" },
+            { num: 29, text: "            root.right = insertRec(root.right, data);" },
+            { num: 30, text: "        }" },
+            { num: 31, text: "        return root;" },
+            { num: 32, text: "    }" },
+            { num: 33, text: "" },
+            { num: 34, text: "    public void inorder() { inorderRec(root); System.out.println(); }" },
+            { num: 35, text: "    private void inorderRec(Node root) {" },
+            { num: 36, text: "        if (root != null) {" },
+            { num: 37, text: "            inorderRec(root.left);" },
+            { num: 38, text: "            System.out.print(root.data + \" \");" },
+            { num: 39, text: "            inorderRec(root.right);" },
+            { num: 40, text: "        }" },
+            { num: 41, text: "    }" },
+            { num: 42, text: "" },
+            { num: 43, text: "    public void preorder() { preorderRec(root); System.out.println(); }" },
+            { num: 44, text: "    private void preorderRec(Node root) {" },
+            { num: 45, text: "        if (root != null) {" },
+            { num: 46, text: "            System.out.print(root.data + \" \");" },
+            { num: 47, text: "            preorderRec(root.left);" },
+            { num: 48, text: "            preorderRec(root.right);" },
+            { num: 49, text: "        }" },
+            { num: 50, text: "    }" },
+            { num: 51, text: "" },
+            { num: 52, text: "    public void postorder() { postorderRec(root); System.out.println(); }" },
+            { num: 53, text: "    private void postorderRec(Node root) {" },
+            { num: 54, text: "        if (root != null) {" },
+            { num: 55, text: "            postorderRec(root.left);" },
+            { num: 56, text: "            postorderRec(root.right);" },
+            { num: 57, text: "            System.out.print(root.data + \" \");" },
+            { num: 58, text: "        }" },
+            { num: 59, text: "    }" },
+            { num: 60, text: "" },
+            { num: 61, text: "    public static void main(String[] args) {" },
+            { num: 62, text: "        tree bst = new tree();" },
+            { num: 63, text: "        bst.insert(50); bst.insert(30); bst.insert(20);" },
+            { num: 64, text: "        bst.insert(40); bst.insert(70); bst.insert(60); bst.insert(80);" },
+            { num: 65, text: "    }" }
+        ];
+
+        // Definisi Posisi Visual Node di Canvas secara responsif (x, y % of container)
+        const nodePositions = {
+            50: { x: 50, y: 15, parent: null, label: "50 (Root)" },
+            30: { x: 26, y: 40, parent: 50, label: "30" },
+            70: { x: 74, y: 40, parent: 50, label: "70" },
+            20: { x: 13, y: 75, parent: 30, label: "20" },
+            40: { x: 39, y: 75, parent: 30, label: "40" },
+            60: { x: 61, y: 75, parent: 70, label: "60" },
+            80: { x: 87, y: 75, parent: 70, label: "80" }
+        };
+
+        // Urutan node yang dimasukkan
+        const insertSequence = [50, 30, 20, 40, 70, 60, 80];
+
+        // Global State
+        let currentMode = 'insert'; // 'insert', 'inorder', 'preorder', 'postorder'
+        let currentStepIndex = 0;
+        let playInterval = null;
+        let isPlaying = false;
+        let stepsTimeline = [];
+
+        // DATABASE LANGKAH UNTUK MODE INSERT
+        const insertSteps = [
+            {
+                lines: [62],
+                nodes: {},
+                activeNode: null,
+                action: "Inisialisasi objek Tree di memori.",
+                detail: "Mengeksekusi konstruktor <code class='code-font bg-slate-950 p-0.5 rounded text-amber-400'>new tree()</code>. Variabel <code class='code-font bg-slate-950 p-0.5 rounded text-indigo-300'>root</code> diset ke <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>null</code>. Pohon saat ini kosong.",
+                console: "Simulator initialized. Ready for insertion."
+            },
+            // Insert 50
+            {
+                lines: [63, 17, 18],
+                nodes: {},
+                activeNode: null,
+                action: "Menyisipkan nilai 50 (bst.insert(50)).",
+                detail: "Memanggil fungsi perantara <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>insert(50)</code> yang selanjutnya akan mengeksekusi rekursi awal <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>insertRec(root, 50)</code>.",
+                console: "Memanggil bst.insert(50)..."
+            },
+            {
+                lines: [21, 22, 23, 24],
+                nodes: { 50: "active" },
+                activeNode: 50,
+                action: "Root masih kosong. Membuat Node baru dengan nilai 50.",
+                detail: "Karena <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>root == null</code> bernilai TRUE, baris 23 membuat objek <code class='code-font bg-slate-950 p-0.5 text-amber-400'>new Node(50)</code> sebagai root utama pohon.",
+                console: "[Node 50] berhasil ditambahkan sebagai ROOT."
+            },
+            // Insert 30
+            {
+                lines: [63, 17, 18],
+                nodes: { 50: "placed" },
+                activeNode: null,
+                action: "Menyisipkan nilai 30 (bst.insert(30)).",
+                detail: "Pohon biner saat ini memiliki root (50). Program memanggil <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>insertRec(root, 30)</code>.",
+                console: "Memanggil bst.insert(30)..."
+            },
+            {
+                lines: [21, 22, 26],
+                nodes: { 50: "active" },
+                activeNode: 50,
+                action: "Bandingkan 30 dengan data root (50).",
+                detail: "Karena <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>root != null</code>, lanjut mengecek kondisi <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>data < root.data</code> (yaitu: <code class='code-font bg-slate-950 p-0.5 text-amber-300'>30 < 50</code>), hasilnya adalah TRUE.",
+                console: "Bandingkan: 30 < 50 (True). Belok ke sub-pohon KIRI..."
+            },
+            {
+                lines: [27, 21, 22, 23, 24],
+                nodes: { 50: "placed", 30: "active" },
+                activeNode: 30,
+                action: "Anak kiri dari 50 kosong. Membuat Node 30.",
+                detail: "Fungsi rekursif dipanggil pada sub-pohon kiri: <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>insertRec(null, 30)</code>. Node 30 berhasil dibentuk di sisi kiri node 50.",
+                console: "[Node 30] berhasil diletakkan di KIRI 50."
+            },
+            // Insert 20
+            {
+                lines: [63, 17, 18],
+                nodes: { 50: "placed", 30: "placed" },
+                activeNode: null,
+                action: "Menyisipkan nilai 20 (bst.insert(20)).",
+                detail: "Menelusuri dari root (50) untuk menempatkan data baru bernilai 20.",
+                console: "Memanggil bst.insert(20)..."
+            },
+            {
+                lines: [21, 26],
+                nodes: { 50: "active", 30: "placed" },
+                activeNode: 50,
+                action: "Bandingkan 20 dengan data root (50).",
+                detail: "Pengecekan <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>20 < 50</code> menghasilkan nilai TRUE. Beralih ke sub-pohon kiri (menuju Node 30).",
+                console: "Bandingkan: 20 < 50 (True). Menuju sub-pohon KIRI."
+            },
+            {
+                lines: [27, 21, 26],
+                nodes: { 50: "placed", 30: "active" },
+                activeNode: 30,
+                action: "Bandingkan 20 dengan Node 30.",
+                detail: "Pengecekan <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>20 < 30</code> menghasilkan nilai TRUE. Program kembali berbelok ke sub-pohon kiri dari Node 30.",
+                console: "Bandingkan: 20 < 30 (True). Menuju sub-pohon KIRI."
+            },
+            {
+                lines: [27, 21, 22, 23],
+                nodes: { 50: "placed", 30: "placed", 20: "active" },
+                activeNode: 20,
+                action: "Anak kiri dari Node 30 kosong. Membuat Node 20.",
+                detail: "Panggilan rekursif <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>insertRec(null, 20)</code>. Membuat node 20 sebagai anak kiri dari Node 30.",
+                console: "[Node 20] berhasil diletakkan di KIRI 30."
+            },
+            // Insert 40
+            {
+                lines: [64, 17, 18],
+                nodes: { 50: "placed", 30: "placed", 20: "placed" },
+                activeNode: null,
+                action: "Menyisipkan nilai 40.",
+                detail: "Menyisipkan data 40 ke dalam BST.",
+                console: "Memanggil bst.insert(40)..."
+            },
+            {
+                lines: [21, 26],
+                nodes: { 50: "active", 30: "placed", 20: "placed" },
+                activeNode: 50,
+                action: "Bandingkan 40 dengan root (50).",
+                detail: "Pengecekan <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>40 < 50</code> menghasilkan nilai TRUE. Menuju ke Kiri.",
+                console: "Bandingkan: 40 < 50 (True). Menuju sub-pohon KIRI."
+            },
+            {
+                lines: [27, 21, 26, 28],
+                nodes: { 50: "placed", 30: "active", 20: "placed" },
+                activeNode: 30,
+                action: "Bandingkan 40 dengan Node 30.",
+                detail: "Mengecek <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>40 < 30</code> (FALSE). Lanjut mengecek <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>data > root.data</code> yaitu <code class='code-font bg-slate-950 p-0.5 text-amber-300'>40 > 30</code> (TRUE). Menuju sub-pohon KANAN dari Node 30.",
+                console: "Bandingkan: 40 > 30 (True). Menuju sub-pohon KANAN."
+            },
+            {
+                lines: [29, 21, 22, 23],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "active" },
+                activeNode: 40,
+                action: "Anak kanan dari Node 30 kosong. Membuat Node 40.",
+                detail: "Panggilan rekursif <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>insertRec(null, 40)</code> mengalokasikan Node 40 di sisi kanan Node 30.",
+                console: "[Node 40] berhasil diletakkan di KANAN 30."
+            },
+            // Insert 70
+            {
+                lines: [64, 17, 18],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed" },
+                activeNode: null,
+                action: "Menyisipkan nilai 70.",
+                detail: "Memulai penelusuran penyisipan data 70 dari akar.",
+                console: "Memanggil bst.insert(70)..."
+            },
+            {
+                lines: [21, 26, 28],
+                nodes: { 50: "active", 30: "placed", 20: "placed", 40: "placed" },
+                activeNode: 50,
+                action: "Bandingkan 70 dengan root (50).",
+                detail: "Pengecekan <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>70 < 50</code> (FALSE). Pengecekan <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>70 > 50</code> (TRUE). Menuju sub-pohon KANAN.",
+                console: "Bandingkan: 70 > 50 (True). Menuju sub-pohon KANAN."
+            },
+            {
+                lines: [29, 21, 22, 23],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed", 70: "active" },
+                activeNode: 70,
+                action: "Anak kanan dari root kosong. Membuat Node 70.",
+                detail: "Karena sisi kanan root kosong, Node 70 langsung diletakkan di sana sebagai Right Child dari 50.",
+                console: "[Node 70] berhasil diletakkan di KANAN 50."
+            },
+            // Insert 60
+            {
+                lines: [64, 17, 18],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed", 70: "placed" },
+                activeNode: null,
+                action: "Menyisipkan nilai 60.",
+                detail: "Mengevaluasi posisi terbaik untuk menyisipkan nilai 60.",
+                console: "Memanggil bst.insert(60)..."
+            },
+            {
+                lines: [21, 28],
+                nodes: { 50: "active", 30: "placed", 20: "placed", 40: "placed", 70: "placed" },
+                activeNode: 50,
+                action: "Bandingkan 60 dengan root (50).",
+                detail: "Pengecekan <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>60 > 50</code> (TRUE). Menelusuri sub-pohon KANAN (menuju Node 70).",
+                console: "Bandingkan: 60 > 50 (True). Menuju sub-pohon KANAN."
+            },
+            {
+                lines: [29, 21, 26],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed", 70: "active" },
+                activeNode: 70,
+                action: "Bandingkan 60 dengan Node 70.",
+                detail: "Pengecekan <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>60 < 70</code> (TRUE). Belok ke sub-pohon KIRI dari Node 70.",
+                console: "Bandingkan: 60 < 70 (True). Menuju sub-pohon KIRI."
+            },
+            {
+                lines: [27, 21, 22, 23],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed", 70: "placed", 60: "active" },
+                activeNode: 60,
+                action: "Anak kiri dari Node 70 kosong. Membuat Node 60.",
+                detail: "Menyisipkan Node 60 di anak kiri dari Node 70.",
+                console: "[Node 60] berhasil diletakkan di KIRI 70."
+            },
+            // Insert 80
+            {
+                lines: [64, 17, 18],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed", 70: "placed", 60: "placed" },
+                activeNode: null,
+                action: "Menyisipkan nilai 80.",
+                detail: "Menyisipkan nilai terakhir, yaitu 80 ke dalam struktur BST.",
+                console: "Memanggil bst.insert(80)..."
+            },
+            {
+                lines: [21, 28],
+                nodes: { 50: "active", 30: "placed", 20: "placed", 40: "placed", 70: "placed", 60: "placed" },
+                activeNode: 50,
+                action: "Bandingkan 80 dengan root (50).",
+                detail: "Pengecekan <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>80 > 50</code> (TRUE). Menuju Kanan.",
+                console: "Bandingkan: 80 > 50 (True). Menuju sub-pohon KANAN."
+            },
+            {
+                lines: [29, 21, 28],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed", 70: "active", 60: "placed" },
+                activeNode: 70,
+                action: "Bandingkan 80 dengan Node 70.",
+                detail: "Pengecekan <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>80 > 70</code> (TRUE). Belok ke KANAN dari Node 70.",
+                console: "Bandingkan: 80 > 70 (True). Menuju sub-pohon KANAN."
+            },
+            {
+                lines: [29, 21, 22, 23],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed", 70: "placed", 60: "placed", 80: "active" },
+                activeNode: 80,
+                action: "Anak kanan dari Node 70 kosong. Membuat Node 80.",
+                detail: "Meletakkan Node 80 sebagai anak kanan dari Node 70. Struktur pohon biner pencarian (BST) kini telah terbentuk sempurna secara berurutan sesuai program!",
+                console: "[Node 80] berhasil diletakkan di KANAN 70.\n\n--> Selesai Penyisipan!"
+            }
+        ];
+
+        // DATABASE LANGKAH UNTUK INORDER TRAVERSAL
+        const inorderSteps = [
+            {
+                lines: [34],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed", 70: "placed", 60: "placed", 80: "placed" },
+                activeNode: null,
+                action: "Memulai Penelusuran Inorder (Kiri, Akar, Kanan).",
+                detail: "Memanggil fungsi utama <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>inorder()</code> yang mendelegasikan proses ke rekursif awal <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>inorderRec(root)</code>.",
+                console: "--- Penelusuran Inorder Dimulai ---"
+            },
+            {
+                lines: [35, 36, 37],
+                nodes: { 50: "active" },
+                activeNode: 50,
+                action: "Mengunjungi Node 50 (Root). Lanjut ke Kiri.",
+                detail: "Karena <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>root != null</code>, lanjut mengeksekusi rekursi kiri <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>inorderRec(root.left)</code> (yaitu Node 30).",
+                console: "[Pemberhentian 1] Di Node 50 -> Turun ke Kiri."
+            },
+            {
+                lines: [37, 35, 36, 37],
+                nodes: { 50: "visited", 30: "active" },
+                activeNode: 30,
+                action: "Mengunjungi Node 30. Lanjut ke Kiri.",
+                detail: "Dari Node 30, rekursif kembali bergerak ke arah anak kirinya yaitu Node 20.",
+                console: "[Pemberhentian 2] Di Node 30 -> Turun ke Kiri."
+            },
+            {
+                lines: [37, 35, 36, 37],
+                nodes: { 50: "visited", 30: "visited", 20: "active" },
+                activeNode: 20,
+                action: "Mengunjungi Node 20. Lanjut ke Kiri.",
+                detail: "Dari Node 20, program memanggil <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>inorderRec(null)</code> karena anak kiri Node 20 tidak ada.",
+                console: "[Pemberhentian 3] Di Node 20 -> Turun ke Kiri."
+            },
+            {
+                lines: [35, 36],
+                nodes: { 50: "visited", 30: "visited", 20: "active" },
+                activeNode: 20,
+                action: "Kiri dari Node 20 adalah null. Kembali (Backtrack).",
+                detail: "Rekursi mendapati nilai <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>root == null</code>. Fungsi selesai untuk anak kiri dan kembali ke Node 20.",
+                console: "Anak kiri Node 20 null. Kembali."
+            },
+            {
+                lines: [38],
+                nodes: { 50: "visited", 30: "visited", 20: "placed" },
+                activeNode: 20,
+                action: "Mencetak Data Node 20 (Akar lokal).",
+                detail: "Setelah sub-pohon kiri selesai dievaluasi, sekarang saatnya mencetak data pada node saat ini (Node 20).",
+                console: "20"
+            },
+            {
+                lines: [39, 35, 36],
+                nodes: { 50: "visited", 30: "visited", 20: "placed" },
+                activeNode: 20,
+                action: "Cek anak kanan dari Node 20.",
+                detail: "Mengeksekusi <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>inorderRec(root.right)</code>. Karena bernilai <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>null</code>, rekursi ini segera selesai dan kembali ke atas (Node 30).",
+                console: "Anak kanan Node 20 null. Selesai memproses Node 20."
+            },
+            {
+                lines: [38],
+                nodes: { 50: "visited", 30: "placed", 20: "placed" },
+                activeNode: 30,
+                action: "Kembali ke Node 30. Cetak data 30.",
+                detail: "Karena sub-pohon kiri dari Node 30 (yaitu seluruh bagian Node 20) telah selesai, cetak nilai Node 30.",
+                console: "20 30"
+            },
+            {
+                lines: [39, 35, 36, 37],
+                nodes: { 50: "visited", 30: "visited", 20: "placed", 40: "active" },
+                activeNode: 40,
+                action: "Turun ke sub-pohon kanan Node 30 -> Menuju Node 40.",
+                detail: "Menelusuri sub-pohon kanan Node 30. Karena anak kiri Node 40 bernilai null, proses berlanjut ke pencetakan.",
+                console: "[Pemberhentian 4] Di Node 40."
+            },
+            {
+                lines: [38],
+                nodes: { 50: "visited", 30: "visited", 20: "placed", 40: "placed" },
+                activeNode: 40,
+                action: "Cetak Data Node 40.",
+                detail: "Mencetak nilai dari Node 40 ke layar.",
+                console: "20 30 40"
+            },
+            {
+                lines: [39],
+                nodes: { 50: "visited", 30: "visited", 20: "placed", 40: "placed" },
+                activeNode: 40,
+                action: "Anak kanan Node 40 bernilai null. Kembali ke Root utama (50).",
+                detail: "Seluruh sub-pohon kiri dari Root 50 (Node 30, 20, 40) telah selesai dijelajahi secara berurutan. Alur kembali ke Root 50.",
+                console: "Selesai memproses sub-pohon kiri dari Node 50."
+            },
+            {
+                lines: [38],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed" },
+                activeNode: 50,
+                action: "Kembali ke Root 50. Cetak data 50.",
+                detail: "Mencetak nilai Root utama, yaitu 50.",
+                console: "20 30 40 50"
+            },
+            {
+                lines: [39, 35, 36, 37],
+                nodes: { 50: "visited", 30: "placed", 20: "placed", 40: "placed", 70: "active" },
+                activeNode: 70,
+                action: "Menuju sub-pohon kanan Root 50 -> Kunjungi Node 70.",
+                detail: "Program beralih ke sisi kanan akar. Node aktif saat ini adalah Node 70. Sebelum memproses 70, beralih ke anak kirinya terlebih dahulu (60).",
+                console: "[Pemberhentian 5] Di Node 70 -> Turun ke Kiri."
+            },
+            {
+                lines: [37, 35, 36, 37],
+                nodes: { 50: "visited", 30: "placed", 20: "placed", 40: "placed", 70: "visited", 60: "active" },
+                activeNode: 60,
+                action: "Kunjungi Node 60. Anak kirinya bernilai null.",
+                detail: "Node aktif saat ini adalah Node 60. Karena tidak memiliki anak kiri, proses cetak data 60 dapat langsung dilakukan.",
+                console: "[Pemberhentian 6] Di Node 60."
+            },
+            {
+                lines: [38],
+                nodes: { 50: "visited", 30: "placed", 20: "placed", 40: "placed", 70: "visited", 60: "placed" },
+                activeNode: 60,
+                action: "Cetak Data Node 60.",
+                detail: "Mencetak nilai dari Node 60 ke layar.",
+                console: "20 30 40 50 60"
+            },
+            {
+                lines: [39],
+                nodes: { 50: "visited", 30: "placed", 20: "placed", 40: "placed", 70: "visited", 60: "placed" },
+                activeNode: 60,
+                action: "Kembali ke Node 70.",
+                detail: "Anak kanan Node 60 kosong. Selesai memproses Node 60, alur naik kembali ke Node 70.",
+                console: "Selesai memproses Node 60."
+            },
+            {
+                lines: [38],
+                nodes: { 50: "visited", 30: "placed", 20: "placed", 40: "placed", 70: "placed", 60: "placed" },
+                activeNode: 70,
+                action: "Kembali ke Node 70. Cetak data 70.",
+                detail: "Karena sub-pohon kiri dari Node 70 (yaitu Node 60) selesai, cetak nilai Node 70.",
+                console: "20 30 40 50 60 70"
+            },
+            {
+                lines: [39, 35, 36, 37],
+                nodes: { 50: "visited", 30: "placed", 20: "placed", 40: "placed", 70: "visited", 60: "placed", 80: "active" },
+                activeNode: 80,
+                action: "Turun ke sub-pohon kanan Node 70 -> Kunjungi Node 80.",
+                detail: "Node aktif beralih ke Node 80. Anak kiri kosong, bersiap untuk dicetak.",
+                console: "[Pemberhentian 7] Di Node 80."
+            },
+            {
+                lines: [38],
+                nodes: { 50: "visited", 30: "placed", 20: "placed", 40: "placed", 70: "visited", 60: "placed", 80: "placed" },
+                activeNode: 80,
+                action: "Cetak Data Node 80.",
+                detail: "Mencetak nilai terakhir dari pohon yaitu 80.",
+                console: "20 30 40 50 60 70 80"
+            },
+            {
+                lines: [39],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed", 70: "placed", 60: "placed", 80: "placed" },
+                activeNode: null,
+                action: "Semua Node Selesai Ditumpangi. Traversal Inorder Berhasil Selesai!",
+                detail: "Urutan hasil cetak berurutan menaik (sorted ascending) karena sifat dasar Binary Search Tree ketika ditelusuri menggunakan metode Inorder.",
+                console: "20 30 40 50 60 70 80\n\n--> Inorder Traversal Berhasil Selesai!"
+            }
+        ];
+
+        // DATABASE LANGKAH UNTUK PREORDER TRAVERSAL
+        const preorderSteps = [
+            {
+                lines: [43],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed", 70: "placed", 60: "placed", 80: "placed" },
+                activeNode: null,
+                action: "Memulai Penelusuran Preorder (Akar, Kiri, Kanan).",
+                detail: "Memanggil fungsi utama <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>preorder()</code> yang mendelegasikan proses ke rekursif awal <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>preorderRec(root)</code>.",
+                console: "--- Penelusuran Preorder Dimulai ---"
+            },
+            {
+                lines: [44, 45, 46],
+                nodes: { 50: "placed" },
+                activeNode: 50,
+                action: "Cetak Root Utama (50).",
+                detail: "Sesuai prinsip Preorder, data dari akar dicetak *sebelum* turun mengeksplorasi cabang anak.",
+                console: "50"
+            },
+            {
+                lines: [47, 44, 45, 46],
+                nodes: { 50: "visited", 30: "placed" },
+                activeNode: 30,
+                action: "Turun ke cabang kiri -> Cetak Node 30.",
+                detail: "Mengunjungi anak kiri dari 50, yaitu Node 30, lalu langsung mencetak nilainya sebelum masuk lebih dalam.",
+                console: "50 30"
+            },
+            {
+                lines: [47, 44, 45, 46],
+                nodes: { 50: "visited", 30: "visited", 20: "placed" },
+                activeNode: 20,
+                action: "Turun ke cabang kiri kembali -> Cetak Node 20.",
+                detail: "Mengunjungi anak kiri dari 30, yaitu Node 20, dan langsung mencetak nilainya.",
+                console: "50 30 20"
+            },
+            {
+                lines: [47, 44, 45],
+                nodes: { 50: "visited", 30: "visited", 20: "placed" },
+                activeNode: 20,
+                action: "Kiri dari 20 adalah null, beralih mengecek kanan dari 20.",
+                detail: "Karena kedua cabang anak dari 20 bernilai null, proses untuk Node 20 selesai. Alur kembali ke atas.",
+                console: "Cabang Node 20 kosong. Kembali ke atas."
+            },
+            {
+                lines: [48, 44, 45, 46],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "placed" },
+                activeNode: 40,
+                action: "Beralih ke cabang kanan Node 30 -> Cetak Node 40.",
+                detail: "Kembali dari Node 20, program memproses cabang kanan dari Node 30, yaitu Node 40. Data langsung dicetak.",
+                console: "50 30 20 40"
+            },
+            {
+                lines: [48],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "visited" },
+                activeNode: 40,
+                action: "Selesai memproses sub-pohon kiri dari Root (50).",
+                detail: "Dengan tuntasnya evaluasi Node 40, seluruh bagian kiri dari Root utama (50) telah berhasil ditelusuri.",
+                console: "Sub-pohon kiri dari Root selesai diproses."
+            },
+            {
+                lines: [48, 44, 45, 46],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "visited", 70: "placed" },
+                activeNode: 70,
+                action: "Beralih ke cabang kanan Root 50 -> Cetak Node 70.",
+                detail: "Program beralih ke cabang kanan dari Root utama. Node aktif adalah 70. Nilainya langsung dicetak.",
+                console: "50 30 20 40 70"
+            },
+            {
+                lines: [47, 44, 45, 46],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "visited", 70: "visited", 60: "placed" },
+                activeNode: 60,
+                action: "Turun ke cabang kiri dari 70 -> Cetak Node 60.",
+                detail: "Menelusuri cabang anak kiri dari Node 70. Node aktif bernilai 60, nilainya dicetak ke layar.",
+                console: "50 30 20 40 70 60"
+            },
+            {
+                lines: [47],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "visited", 70: "visited", 60: "visited" },
+                activeNode: 60,
+                action: "Cabang Node 60 kosong. Kembali ke Node 70.",
+                detail: "Kembali setelah menyelesaikan proses pencarian pada Node 60.",
+                console: "Selesai memproses Node 60."
+            },
+            {
+                lines: [48, 44, 45, 46],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "visited", 70: "visited", 60: "visited", 80: "placed" },
+                activeNode: 80,
+                action: "Beralih ke cabang kanan dari 70 -> Cetak Node 80.",
+                detail: "Cabang kanan dari Node 70 diproses. Node aktif bernilai 80 dicetak.",
+                console: "50 30 20 40 70 60 80"
+            },
+            {
+                lines: [48],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed", 70: "placed", 60: "placed", 80: "placed" },
+                activeNode: null,
+                action: "Penelusuran Preorder Berhasil Selesai!",
+                detail: "Data dicetak dengan pola: Akar, sub-pohon kiri lengkap, disusul seluruh sub-pohon kanan.",
+                console: "50 30 20 40 70 60 80\n\n--> Preorder Traversal Selesai!"
+            }
+        ];
+
+        // DATABASE LANGKAH UNTUK POSTORDER TRAVERSAL
+        const postorderSteps = [
+            {
+                lines: [52],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed", 70: "placed", 60: "placed", 80: "placed" },
+                activeNode: null,
+                action: "Memulai Penelusuran Postorder (Kiri, Kanan, Akar).",
+                detail: "Memanggil fungsi utama <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>postorder()</code> yang mendelegasikan proses ke rekursif awal <code class='code-font bg-slate-950 p-0.5 text-indigo-300'>postorderRec(root)</code>.",
+                console: "--- Penelusuran Postorder Dimulai ---"
+            },
+            {
+                lines: [53, 54, 55],
+                nodes: { 50: "active" },
+                activeNode: 50,
+                action: "Mengunjungi Root 50. Menuju cabang kiri.",
+                detail: "Pada Postorder, pencetakan data akar ditunda hingga seluruh cabang kirinya dan cabang kanannya selesai dieksplorasi.",
+                console: "[Pemberhentian 1] Mengunjungi Node 50 (Pending) -> Turun ke Kiri."
+            },
+            {
+                lines: [55, 53, 54, 55],
+                nodes: { 50: "visited", 30: "active" },
+                activeNode: 30,
+                action: "Mengunjungi Node 30. Menuju cabang kiri.",
+                detail: "Mengeksplorasi lebih dalam ke cabang kiri dari Node 30.",
+                console: "[Pemberhentian 2] Mengunjungi Node 30 (Pending) -> Turun ke Kiri."
+            },
+            {
+                lines: [55, 53, 54, 55],
+                nodes: { 50: "visited", 30: "visited", 20: "active" },
+                activeNode: 20,
+                action: "Mengunjungi Node 20. Mengecek cabang-cabang anak.",
+                detail: "Mengecek anak kiri dan anak kanan dari Node 20. Karena keduanya bernilai null, program bisa langsung mencetak Node 20.",
+                console: "[Pemberhentian 3] Mengunjungi Node 20."
+            },
+            {
+                lines: [57],
+                nodes: { 50: "visited", 30: "visited", 20: "placed" },
+                activeNode: 20,
+                action: "Cetak Data Node 20.",
+                detail: "Karena anak kiri dan kanan Node 20 bernilai null, maka nilai Node 20 dicetak ke layar.",
+                console: "20"
+            },
+            {
+                lines: [57],
+                nodes: { 50: "visited", 30: "visited", 20: "visited" },
+                activeNode: 30,
+                action: "Kembali ke Node 30. Menuju cabang kanan.",
+                detail: "Selesai mencetak Node 20 (anak kiri), program tidak langsung mencetak Node 30 melainkan wajib memeriksa anak kanannya terlebih dahulu.",
+                console: "Kembali ke Node 30 -> Beralih menelusuri cabang KANAN."
+            },
+            {
+                lines: [56, 53, 54, 55],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "active" },
+                activeNode: 40,
+                action: "Mengunjungi Node 40. Mengecek anak.",
+                detail: "Mengevaluasi Node 40. Karena kedua anaknya bernilai null, bersiap melakukan pencetakan.",
+                console: "[Pemberhentian 4] Mengunjungi Node 40."
+            },
+            {
+                lines: [57],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "placed" },
+                activeNode: 40,
+                action: "Cetak Data Node 40.",
+                detail: "Mencetak nilai dari Node 40 ke layar.",
+                console: "20 40"
+            },
+            {
+                lines: [57],
+                nodes: { 50: "visited", 30: "placed", 20: "visited", 40: "visited" },
+                activeNode: 30,
+                action: "Kembali ke Node 30. Karena Kiri dan Kanan selesai, Cetak Node 30.",
+                detail: "Kedua anak dari Node 30 (Kiri: 20, Kanan: 40) telah selesai dicetak. Sekarang, nilai Node 30 dicetak.",
+                console: "20 40 30"
+            },
+            {
+                lines: [57],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "visited" },
+                activeNode: 50,
+                action: "Kembali ke Root 50. Menuju cabang kanan.",
+                detail: "Setengah bagian kiri pohon telah tuntas. Root 50 menunda pencetakan dirinya dan mengarahkan alur ke cabang kanan (Node 70).",
+                console: "Kembali ke Root 50 -> Beralih menelusuri seluruh cabang KANAN."
+            },
+            {
+                lines: [56, 53, 54, 55],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "visited", 70: "active" },
+                activeNode: 70,
+                action: "Mengunjungi Node 70. Menuju cabang kiri.",
+                detail: "Sifat rekursif menuntut pengecekan ke arah anak kiri (Node 60) sebelum memproses Node 70.",
+                console: "[Pemberhentian 5] Mengunjungi Node 70 (Pending) -> Turun ke Kiri."
+            },
+            {
+                lines: [55, 53, 54, 55],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "visited", 70: "visited", 60: "active" },
+                activeNode: 60,
+                action: "Mengunjungi Node 60. Mengecek anak.",
+                detail: "Node 60 dievaluasi. Karena tidak memiliki anak kiri dan kanan, nilainya langsung dicetak.",
+                console: "[Pemberhentian 6] Mengunjungi Node 60."
+            },
+            {
+                lines: [57],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "visited", 70: "visited", 60: "placed" },
+                activeNode: 60,
+                action: "Cetak Data Node 60.",
+                detail: "Mencetak nilai dari Node 60.",
+                console: "20 40 30 60"
+            },
+            {
+                lines: [57],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "visited", 70: "visited", 60: "visited" },
+                activeNode: 70,
+                action: "Kembali ke Node 70. Menuju cabang kanan.",
+                detail: "Anak kiri selesai. Alur program berlanjut ke pengecekan anak kanan (Node 80).",
+                console: "Kembali ke Node 70 -> Beralih menelusuri cabang KANAN."
+            },
+            {
+                lines: [56, 53, 54, 55],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "visited", 70: "visited", 60: "visited", 80: "active" },
+                activeNode: 80,
+                action: "Mengunjungi Node 80. Mengecek anak.",
+                detail: "Mengevaluasi Node 80. Bebas dari anak, bersiap mencetak.",
+                console: "[Pemberhentian 7] Mengunjungi Node 80."
+            },
+            {
+                lines: [57],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "visited", 70: "visited", 60: "visited", 80: "placed" },
+                activeNode: 80,
+                action: "Cetak Data Node 80.",
+                detail: "Mencetak nilai Node 80.",
+                console: "20 40 30 60 80"
+            },
+            {
+                lines: [57],
+                nodes: { 50: "visited", 30: "visited", 20: "visited", 40: "visited", 70: "placed", 60: "visited", 80: "visited" },
+                activeNode: 70,
+                action: "Kembali ke Node 70. Karena Kiri dan Kanan selesai, Cetak Node 70.",
+                detail: "Kedua anak dari Node 70 telah diproses lengkap. Sekarang, cetak nilai Node 70.",
+                console: "20 40 30 60 80 70"
+            },
+            {
+                lines: [57],
+                nodes: { 50: "placed", 30: "visited", 20: "visited", 40: "visited", 70: "visited", 60: "visited", 80: "visited" },
+                activeNode: 50,
+                action: "Kembali ke Root Utama (50). Cetak Root 50.",
+                detail: "Seluruh sub-pohon kiri dan kanan dari Root selesai diproses. Langkah terakhir adalah mencetak nilai Root utama, yaitu 50.",
+                console: "20 40 30 60 80 70 50"
+            },
+            {
+                lines: [57],
+                nodes: { 50: "placed", 30: "placed", 20: "placed", 40: "placed", 70: "placed", 60: "placed", 80: "placed" },
+                activeNode: null,
+                action: "Penelusuran Postorder Berhasil Selesai!",
+                detail: "Nilai root utama (50) tercetak di paling akhir penelusuran sesuai aturan utama Postorder.",
+                console: "20 40 30 60 80 70 50\n\n--> Postorder Traversal Selesai!"
+            }
+        ];
+
+        // INITIALIZATION AND RENDERING CODE PANEL
+        function initCodePanel() {
+            const container = document.getElementById('code-container');
+            container.innerHTML = '';
+            
+            javaCodeLines.forEach(line => {
+                const lineRow = document.createElement('div');
+                lineRow.id = `code-line-${line.num}`;
+                lineRow.className = `flex py-0.5 px-2 rounded transition-colors duration-200`;
+                
+                // Line Number
+                const numSpan = document.createElement('span');
+                numSpan.className = 'w-8 text-right text-slate-600 select-none mr-4 block shrink-0 border-r border-slate-800 pr-2';
+                numSpan.innerText = line.num;
+                
+                // Line Code Content
+                const contentSpan = document.createElement('span');
+                contentSpan.className = 'whitespace-pre';
+                
+                // Simple Syntax Highlighting for Java
+                let text = line.text;
+                text = text.replace(/(class|public|private|static|void|int|new|return|if|else|package|import|null)/g, '<span class="text-indigo-400 font-semibold">$1</span>');
+                text = text.replace(/(System\.out\.println|System\.out\.print)/g, '<span class="text-amber-400">$1</span>');
+                text = text.replace(/(\/\/.*)/g, '<span class="text-slate-500 font-normal italic">$1</span>');
+                text = text.replace(/(".*?")/g, '<span class="text-emerald-400">$1</span>');
+                text = text.replace(/\b(\d+)\b/g, '<span class="text-cyan-400">$1</span>');
+                
+                contentSpan.innerHTML = text;
+                
+                lineRow.appendChild(numSpan);
+                lineRow.appendChild(contentSpan);
+                container.appendChild(lineRow);
+            });
+        }
+
+        // VISUAL TREE GRAPHIC GENERATION
+        function renderTree(nodeStates, activeNodeId) {
+            const container = document.getElementById('tree-nodes-container');
+            const svg = document.getElementById('tree-svg-connections');
+            
+            container.innerHTML = '';
+            svg.innerHTML = '';
+
+            // Get viewport boundaries
+            const width = svg.clientWidth || svg.getBoundingClientRect().width || 500;
+            const height = svg.clientHeight || svg.getBoundingClientRect().height || 400;
+
+            // Step 1: Draw connection lines (Edges)
+            Object.keys(nodePositions).forEach(id => {
+                const pos = nodePositions[id];
+                const nodeState = nodeStates[id];
+                
+                // Only draw line if the node is "placed" or "visited" or "active"
+                if (nodeState && pos.parent) {
+                    const parentPos = nodePositions[pos.parent];
+                    
+                    const x1 = (parentPos.x / 100) * width;
+                    const y1 = (parentPos.y / 100) * height;
+                    const x2 = (pos.x / 100) * width;
+                    const y2 = (pos.y / 100) * height;
+
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute("x1", x1);
+                    line.setAttribute("y1", y1);
+                    line.setAttribute("x2", x2);
+                    line.setAttribute("y2", y2);
+                    
+                    // Determine stroke color
+                    if (activeNodeId == id || (nodeStates[pos.parent] === 'visited' && nodeStates[id] === 'active')) {
+                        line.setAttribute("stroke", "#f59e0b"); // yellow warning-like path
+                        line.setAttribute("stroke-width", "3");
+                        line.setAttribute("class", "stroke-dash-animation");
+                    } else if (nodeState === 'placed' || nodeState === 'visited') {
+                        line.setAttribute("stroke", "#10b981"); // emerald green connection
+                        line.setAttribute("stroke-width", "2");
+                    } else {
+                        line.setAttribute("stroke", "#334155"); // dim gray connection
+                        line.setAttribute("stroke-width", "1");
+                    }
+                    svg.appendChild(line);
+                }
+            });
+
+            // Step 2: Draw node circles
+            Object.keys(nodePositions).forEach(id => {
+                const pos = nodePositions[id];
+                const state = nodeStates[id]; // 'placed', 'visited', 'active', or undefined
+                
+                const nodeDiv = document.createElement('div');
+                nodeDiv.className = `absolute transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center transition-all duration-300`;
+                nodeDiv.style.left = `${pos.x}%`;
+                nodeDiv.style.top = `${pos.y}%`;
+
+                // Outer design for Node
+                let bgClass = "bg-slate-800 border-slate-700 text-slate-500 scale-90";
+                if (state === 'placed') {
+                    bgClass = "bg-indigo-600 border-indigo-400 text-white shadow-lg shadow-indigo-600/30 font-bold scale-100";
+                } else if (state === 'visited') {
+                    bgClass = "bg-emerald-600 border-emerald-400 text-white shadow-lg shadow-emerald-500/20 font-bold scale-100";
+                }
+                
+                if (activeNodeId == id) {
+                    bgClass = "bg-amber-500 border-amber-300 text-slate-950 font-black scale-110 node-active z-20";
+                }
+
+                // Node Circle Element
+                const circle = document.createElement('div');
+                circle.className = `w-12 h-12 rounded-full border-2 ${bgClass} flex items-center justify-center text-sm transition-all duration-300`;
+                circle.innerHTML = id;
+                
+                // Add label beneath
+                const label = document.createElement('span');
+                label.className = `text-[10px] mt-1 font-semibold ${activeNodeId == id ? 'text-amber-400' : 'text-slate-400'} whitespace-nowrap`;
+                label.innerText = pos.label;
+
+                nodeDiv.appendChild(circle);
+                nodeDiv.appendChild(label);
+                container.appendChild(nodeDiv);
+            });
+        }
+
+        // SIMULATION NAVIGATION ENGINE
+        function selectTimeline() {
+            if (currentMode === 'insert') {
+                stepsTimeline = insertSteps;
+            } else if (currentMode === 'inorder') {
+                stepsTimeline = inorderSteps;
+            } else if (currentMode === 'preorder') {
+                stepsTimeline = preorderSteps;
+            } else if (currentMode === 'postorder') {
+                stepsTimeline = postorderSteps;
+            }
+        }
+
+        function changeMode(mode) {
+            stopPlay();
+            currentMode = mode;
+            currentStepIndex = 0;
+            
+            // Toggle active classes on tab buttons
+            ['insert', 'inorder', 'preorder', 'postorder'].forEach(m => {
+                const btn = document.getElementById(`btn-mode-${m}`);
+                if (m === mode) {
+                    btn.className = "px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-indigo-600 text-white";
+                } else {
+                    btn.className = "px-4 py-2 rounded-lg font-medium transition-all duration-200 text-slate-400 hover:text-white";
+                }
+            });
+
+            selectTimeline();
+            clearConsole();
+            updateStepView();
+        }
+
+        function clearConsole() {
+            const consoleBox = document.getElementById('console-output');
+            consoleBox.innerHTML = `<div class="text-slate-500">// Menunggu eksekusi mode [${currentMode.toUpperCase()}]...</div>`;
+        }
+
+        function printToConsole(text) {
+            const consoleBox = document.getElementById('console-output');
+            
+            // Clean initial placeholder text if exists
+            if (consoleBox.innerHTML.includes('Menunggu') || consoleBox.innerHTML.includes('Jalankan')) {
+                consoleBox.innerHTML = '';
+            }
+
+            const line = document.createElement('div');
+            line.className = 'text-slate-200 border-l-2 border-slate-800 pl-2 py-0.5';
+            line.innerHTML = `<span class="text-slate-600 mr-2">></span>` + text.replace(/\n/g, '<br>');
+            consoleBox.appendChild(line);
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        function updateStepView() {
+            const currentStep = stepsTimeline[currentStepIndex];
+            if (!currentStep) return;
+
+            // 1. Update Labels & Counter
+            document.getElementById('step-count').innerText = `LANGKAH: ${currentStepIndex + 1} / ${stepsTimeline.length}`;
+            document.getElementById('current-action').innerText = currentStep.action;
+            document.getElementById('step-detail').innerHTML = currentStep.detail;
+
+            // 2. Highlight Code Lines
+            // Reset all highlights
+            javaCodeLines.forEach(line => {
+                const el = document.getElementById(`code-line-${line.num}`);
+                if (el) el.className = `flex py-0.5 px-2 rounded transition-colors duration-200 hover:bg-slate-800/20`;
+            });
+
+            // Highlight new active lines
+            let firstElement = null;
+            currentStep.lines.forEach(lineNum => {
+                const el = document.getElementById(`code-line-${lineNum}`);
+                if (el) {
+                    el.className = `flex py-0.5 px-2 rounded transition-colors duration-200 bg-indigo-950/80 border-l-2 border-indigo-500 text-white`;
+                    if (!firstElement) firstElement = el;
+                }
+            });
+
+            // Scroll code editor to show current active line
+            if (firstElement) {
+                firstElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            // 3. Render Tree state
+            renderTree(currentStep.nodes, currentStep.activeNode);
+
+            // 4. Update Console output
+            // Let's print the specific console content for this step
+            if (currentStepIndex === 0) {
+                clearConsole();
+            }
+            printToConsole(currentStep.console);
+
+            // Handle button states
+            document.getElementById('btn-prev').disabled = (currentStepIndex === 0);
+            document.getElementById('btn-next').disabled = (currentStepIndex === stepsTimeline.length - 1);
+        }
+
+        function nextStep() {
+            if (currentStepIndex < stepsTimeline.length - 1) {
+                currentStepIndex++;
+                updateStepView();
+            } else {
+                stopPlay();
+            }
+        }
+
+        function prevStep() {
+            if (currentStepIndex > 0) {
+                currentStepIndex--;
+                // Recalculate console output up to this step
+                rebuildConsoleHistory();
+                updateStepView();
+            }
+        }
+
+        function rebuildConsoleHistory() {
+            clearConsole();
+            for (let i = 0; i <= currentStepIndex; i++) {
+                printToConsole(stepsTimeline[i].console);
+            }
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                stopPlay();
+            } else {
+                startPlay();
+            }
+        }
+
+        function startPlay() {
+            if (currentStepIndex === stepsTimeline.length - 1) {
+                currentStepIndex = 0;
+                clearConsole();
+            }
+            
+            isPlaying = true;
+            document.getElementById('play-icon').className = "fa-solid fa-pause text-sm";
+            document.getElementById('play-text').innerText = "Pause";
+            
+            const speed = parseInt(document.getElementById('play-speed').value);
+            
+            playInterval = setInterval(() => {
+                nextStep();
+                if (currentStepIndex === stepsTimeline.length - 1) {
+                    stopPlay();
+                }
+            }, speed);
+        }
+
+        function stopPlay() {
+            isPlaying = false;
+            document.getElementById('play-icon').className = "fa-solid fa-play text-sm";
+            document.getElementById('play-text').innerText = "Mulai";
+            if (playInterval) {
+                clearInterval(playInterval);
+                playInterval = null;
+            }
+        }
+
+        function resetSimulation() {
+            stopPlay();
+            currentStepIndex = 0;
+            clearConsole();
+            updateStepView();
+        }
+
+        // Listen for speed changes while playing
+        document.getElementById('play-speed').addEventListener('change', () => {
+            if (isPlaying) {
+                stopPlay();
+                startPlay();
+            }
+        });
+
+        // Window resize event handler to redraw tree SVG lines properly
+        window.addEventListener('resize', () => {
+            if (stepsTimeline.length > 0) {
+                const currentStep = stepsTimeline[currentStepIndex];
+                renderTree(currentStep.nodes, currentStep.activeNode);
+            }
+        });
+
+        // Initialize program load
+        window.onload = function() {
+            initCodePanel();
+            selectTimeline();
+            updateStepView();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alur Program java.util.LinkedList</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .highlight-line {
+            background-color: #334155;
+            border-left: 4px solid #3b82f6;
+            margin-left: -1rem;
+            padding-left: calc(1rem - 4px);
+            font-weight: bold;
+            color: #60a5fa;
+        }
+
+        .list-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1rem;
+            background: #f1f5f9;
+            border-radius: 0.5rem;
+            min-height: 80px;
+            flex-wrap: wrap;
+        }
+
+        .node {
+            display: flex;
+            align-items: center;
+        }
+
+        .node-box {
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #64748b;
+            border-radius: 6px;
+            background: white;
+            min-width: 60px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .node-index {
+            background: #e2e8f0;
+            font-size: 0.7rem;
+            color: #475569;
+            padding: 2px 0;
+            border-bottom: 1px solid #cbd5e1;
+        }
+
+        .node-val {
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 8px 12px;
+            color: #0f172a;
+        }
+
+        .arrow {
+            color: #94a3b8;
+            margin: 0 4px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .empty-state {
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        /* Action highlights */
+        .node-added .node-box { border-color: #22c55e; background-color: #f0fdf4; box-shadow: 0 0 10px rgba(34, 197, 94, 0.3); }
+        .node-added .node-index { background-color: #dcfce7; border-bottom-color: #bbf7d0; }
+        
+        .node-shifted .node-box { border-style: dashed; }
+        
+        .node-removed .node-box { 
+            border-color: #ef4444; 
+            background-color: #fef2f2;
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+        
+        .step-card {
+            transition: transform 0.2s;
+        }
+        .step-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto space-y-8">
+        
+        <!-- Header & Code Source -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="bg-blue-600 p-6 text-white">
+                <h1 class="text-2xl font-bold mb-2">Analisis Alur <code>java.util.LinkedList</code></h1>
+                <p class="text-blue-100">Visualisasi langkah demi langkah dari kode yang Anda berikan. Catatan: LinkedList bawaan Java sebenarnya menggunakan <strong>Doubly Linked List</strong> di bawah layar.</p>
+            </div>
+            <div class="p-6">
+                <div class="code-block">
+<div>LinkedList&lt;Integer&gt; list = new LinkedList&lt;&gt;();</div>
+<div>list.add(5);</div>
+<div>list.add(6);</div>
+<div>list.add(9);</div>
+<div>list.add(7);</div>
+<div>list.add(1, 4);</div>
+<div>list.remove(3);</div>
+<div>System.out.println(list);</div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="text-xl font-bold text-gray-800 border-b-2 border-gray-200 pb-2">Langkah per Langkah:</h2>
+
+        <!-- Step 1 -->
+        <div class="step-card bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-slate-700 text-white font-mono text-sm px-3 py-1 rounded">1</span>
+                <code class="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded">LinkedList&lt;Integer&gt; list = new LinkedList&lt;&gt;();</code>
+            </div>
+            <p class="text-gray-600 mb-4 text-sm"><strong>Penjelasan:</strong> Mendeklarasikan dan membuat objek Linked List kosong. `head` dan `tail` bernilai null.</p>
+            <div class="list-container">
+                <span class="empty-state">[] (List Kosong)</span>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-slate-700 text-white font-mono text-sm px-3 py-1 rounded">2</span>
+                <code class="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded">list.add(5);</code>
+            </div>
+            <p class="text-gray-600 mb-4 text-sm"><strong>Penjelasan:</strong> Method `add(E e)` pada Java secara default menambahkan elemen di posisi paling belakang (Tail). Karena list masih kosong, `5` menjadi elemen pertama (indeks 0).</p>
+            <div class="list-container">
+                <div class="node node-added">
+                    <div class="node-box"><div class="node-index">idx: 0</div><div class="node-val">5</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-slate-700 text-white font-mono text-sm px-3 py-1 rounded">3</span>
+                <code class="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded">list.add(6);</code>
+            </div>
+            <p class="text-gray-600 mb-4 text-sm"><strong>Penjelasan:</strong> Menambahkan `6` di belakang list.</p>
+            <div class="list-container">
+                <div class="node">
+                    <div class="node-box"><div class="node-index">idx: 0</div><div class="node-val">5</div></div>
+                </div>
+                <div class="arrow"><i class="fas fa-arrows-left-right text-xs"></i></div>
+                <div class="node node-added">
+                    <div class="node-box"><div class="node-index">idx: 1</div><div class="node-val">6</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-card bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-slate-700 text-white font-mono text-sm px-3 py-1 rounded">4</span>
+                <code class="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded">list.add(9);</code>
+            </div>
+            <p class="text-gray-600 mb-4 text-sm"><strong>Penjelasan:</strong> Menambahkan `9` di belakang list.</p>
+            <div class="list-container">
+                <div class="node"><div class="node-box"><div class="node-index">idx: 0</div><div class="node-val">5</div></div></div>
+                <div class="arrow"><i class="fas fa-arrows-left-right text-xs"></i></div>
+                <div class="node"><div class="node-box"><div class="node-index">idx: 1</div><div class="node-val">6</div></div></div>
+                <div class="arrow"><i class="fas fa-arrows-left-right text-xs"></i></div>
+                <div class="node node-added">
+                    <div class="node-box"><div class="node-index">idx: 2</div><div class="node-val">9</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step-card bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-slate-700 text-white font-mono text-sm px-3 py-1 rounded">5</span>
+                <code class="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded">list.add(7);</code>
+            </div>
+            <p class="text-gray-600 mb-4 text-sm"><strong>Penjelasan:</strong> Menambahkan `7` di belakang list. Kondisi saat ini: [5, 6, 9, 7].</p>
+            <div class="list-container">
+                <div class="node"><div class="node-box"><div class="node-index">0</div><div class="node-val">5</div></div></div>
+                <div class="arrow"><i class="fas fa-arrows-left-right text-xs"></i></div>
+                <div class="node"><div class="node-box"><div class="node-index">1</div><div class="node-val">6</div></div></div>
+                <div class="arrow"><i class="fas fa-arrows-left-right text-xs"></i></div>
+                <div class="node"><div class="node-box"><div class="node-index">2</div><div class="node-val">9</div></div></div>
+                <div class="arrow"><i class="fas fa-arrows-left-right text-xs"></i></div>
+                <div class="node node-added">
+                    <div class="node-box"><div class="node-index">3</div><div class="node-val">7</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 6 (Crucial) -->
+        <div class="step-card bg-yellow-50 border-yellow-200 rounded-xl shadow-sm border p-6 relative overflow-hidden">
+            <div class="absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-bl-lg">PENTING</div>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-yellow-700 text-white font-mono text-sm px-3 py-1 rounded">6</span>
+                <code class="text-blue-800 font-bold bg-white px-2 py-1 rounded border border-yellow-300">list.add(1, 4);</code>
+            </div>
+            <p class="text-gray-700 mb-4 text-sm"><strong>Penjelasan:</strong> Method `add(int index, E element)` ini menyisipkan angka `4` pada <strong>indeks ke-1</strong>. Akibatnya, elemen yang tadinya ada di indeks 1 (yaitu angka `6`) beserta semua elemen di kanannya akan <strong>bergeser ke kanan</strong> (indeksnya bertambah 1).</p>
+            <div class="list-container bg-white border border-yellow-200">
+                <div class="node"><div class="node-box"><div class="node-index">0</div><div class="node-val">5</div></div></div>
+                <div class="arrow"><i class="fas fa-arrows-left-right text-xs"></i></div>
+                
+                <!-- Inserted Node -->
+                <div class="node node-added relative">
+                    <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-green-600 whitespace-nowrap bg-green-100 px-1 rounded">Disisipkan disini</div>
+                    <div class="node-box border-green-500"><div class="node-index bg-green-100 text-green-800">1 (Baru)</div><div class="node-val text-green-700">4</div></div>
+                </div>
+                <div class="arrow"><i class="fas fa-arrows-left-right text-xs"></i></div>
+                
+                <!-- Shifted Nodes -->
+                <div class="node node-shifted opacity-70"><div class="node-box"><div class="node-index text-red-500 line-through">1</div><div class="node-index bg-yellow-100">2 (Geser)</div><div class="node-val">6</div></div></div>
+                <div class="arrow opacity-70"><i class="fas fa-arrows-left-right text-xs"></i></div>
+                <div class="node node-shifted opacity-70"><div class="node-box"><div class="node-index text-red-500 line-through">2</div><div class="node-index bg-yellow-100">3 (Geser)</div><div class="node-val">9</div></div></div>
+                <div class="arrow opacity-70"><i class="fas fa-arrows-left-right text-xs"></i></div>
+                <div class="node node-shifted opacity-70"><div class="node-box"><div class="node-index text-red-500 line-through">3</div><div class="node-index bg-yellow-100">4 (Geser)</div><div class="node-val">7</div></div></div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2 text-right">Hasil sementara: [5, 4, 6, 9, 7]</p>
+        </div>
+
+        <!-- Step 7 (Crucial) -->
+        <div class="step-card bg-red-50 border-red-200 rounded-xl shadow-sm border p-6 relative overflow-hidden">
+            <div class="absolute top-0 right-0 bg-red-400 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">PENTING</div>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-red-700 text-white font-mono text-sm px-3 py-1 rounded">7</span>
+                <code class="text-blue-800 font-bold bg-white px-2 py-1 rounded border border-red-300">list.remove(3);</code>
+            </div>
+            <p class="text-gray-700 mb-4 text-sm"><strong>Penjelasan:</strong> Method `remove(int index)` akan menghapus elemen yang berada di <strong>indeks ke-3</strong>. Mari kita lihat list kita saat ini: `[5 (idx 0), 4 (idx 1), 6 (idx 2), 9 (idx 3), 7 (idx 4)]`. Elemen di indeks ke-3 adalah angka <strong>9</strong>. Angka 9 dihapus, dan angka 7 bergeser ke kiri menempati indeks ke-3.</p>
+            <div class="list-container bg-white border border-red-200">
+                <div class="node"><div class="node-box"><div class="node-index">0</div><div class="node-val">5</div></div></div>
+                <div class="arrow"><i class="fas fa-arrows-left-right text-xs"></i></div>
+                <div class="node"><div class="node-box"><div class="node-index">1</div><div class="node-val">4</div></div></div>
+                <div class="arrow"><i class="fas fa-arrows-left-right text-xs"></i></div>
+                <div class="node"><div class="node-box"><div class="node-index">2</div><div class="node-val">6</div></div></div>
+                
+                <!-- Removed Node -->
+                <div class="arrow"><i class="fas fa-times text-red-500 mx-2"></i></div>
+                <div class="node node-removed relative">
+                    <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-red-600 whitespace-nowrap bg-red-100 px-1 rounded">Dihapus</div>
+                    <div class="node-box"><div class="node-index bg-red-100 text-red-800">3</div><div class="node-val text-red-700">9</div></div>
+                </div>
+                
+                <!-- Shifted Node -->
+                <div class="arrow"><i class="fas fa-arrow-left text-blue-500 mx-2"></i></div>
+                <div class="node"><div class="node-box"><div class="node-index text-red-500 line-through">4</div><div class="node-index bg-blue-100">3 (Maju)</div><div class="node-val">7</div></div></div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2 text-right">Hasil sementara: [5, 4, 6, 7]</p>
+        </div>
+
+        <!-- Step 8 (Output) -->
+        <div class="step-card bg-gray-800 text-white rounded-xl shadow-lg border-2 border-gray-900 p-6">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-gray-600 text-white font-mono text-sm px-3 py-1 rounded">8</span>
+                <code class="text-green-400 font-bold bg-gray-900 px-2 py-1 rounded">System.out.println(list);</code>
+            </div>
+            <p class="text-gray-300 mb-4 text-sm"><strong>Penjelasan:</strong> Mencetak hasil akhir list ke console/terminal.</p>
+            
+            <div class="bg-black p-4 rounded font-mono text-green-500 border border-gray-700 shadow-inner">
+                &gt; [5, 4, 6, 7]
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
